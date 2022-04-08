@@ -21,9 +21,15 @@ func (r *RepositoryAdmin) Migration() {
 }
 
 func (r *RepositoryAdmin) InsertSampleData() {
-	admins := []Admin{{Name: "yusuf", AdminName: "yb", Email: "y@b.com", Password: "yusuf123"}}
+	admin1 := NewAdmin("yusufb", "y@b.com", "yusuf123")
+	admin2 := NewAdmin("ysf", "y@sf.com", "yusuf123")
+	admins := []Admin{
+		*admin1,
+		*admin2,
+	}
 	for _, a := range admins {
-		r.db.Where(Admin{Email: a.Email}).Attrs(Admin{Email: a.Email, AdminName: a.AdminName}).FirstOrCreate(&a)
+
+		r.db.Where(Admin{Email: a.Email}).Attrs(Admin{Email: a.Email, Username: a.Username}).FirstOrCreate(&a)
 	}
 }
 
@@ -31,37 +37,39 @@ func (r *RepositoryAdmin) GetAll(pageIndex, pageSize int) ([]Admin, int) {
 	var admins []Admin
 	var count int64
 
-	r.db.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&admins).Count(&count)
-
+	r.db.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&admins)
+	r.db.Model(&Admin{}).Count(&count)
 	return admins, int(count)
 }
 
-func (r *RepositoryAdmin) GetByID(id int) Admin {
+func (r *RepositoryAdmin) GetByID(id int) *Admin {
 	var admin Admin
 	result := r.db.Find(&admin, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		fmt.Printf("Admin not found with id : %d", id)
-		return Admin{}
+		return &Admin{}
 	}
-	return admin
+	return &admin
 }
 
-func (r *RepositoryAdmin) GetByName(name string) []Admin {
-	var admins []Admin
-	r.db.Where("Name LIKE ?", "%"+name+"%").Find(&admins)
-	return admins
+func (r *RepositoryAdmin) GetByUserName(name string) *Admin {
+	var admin Admin
+	result := r.db.Where("Username = ?", name).Find(&admin)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		fmt.Printf("Admin not found with name : %s", name)
+		return &Admin{}
+	}
+	return &admin
 }
 
-func (r *RepositoryAdmin) GetByMail(mail string) []Admin {
-	var admins []Admin
-	r.db.Where("Email = ?", mail).Find(&admins)
-	return admins
-}
-
-func (r *RepositoryAdmin) GetByMailAndPassword(mail string, pass string) []Admin {
-	var admins []Admin
-	r.db.Raw("SELECT * FROM Admin WHERE Email = ? AND Password =?", mail, pass).Scan(&admins)
-	return admins
+func (r *RepositoryAdmin) GetByMail(mail string) *Admin {
+	var admin Admin
+	result := r.db.Where("Email = ?", mail).First(&admin)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		fmt.Printf("Admin not found with mail : %s", mail)
+		return &Admin{}
+	}
+	return &admin
 }
 
 func (r *RepositoryAdmin) Delete(a Admin) error {

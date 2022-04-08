@@ -30,43 +30,39 @@ func (r *RepositoryCustomer) GetAll(pageIndex, pageSize int) ([]Customer, int) {
 	var customers []Customer
 	var count int64
 
-	r.db.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&customers).Count(&count)
-
+	r.db.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&customers)
+	r.db.Model(&Customer{}).Count(&count)
 	return customers, int(count)
 }
 
-func (r *RepositoryCustomer) GetByID(id int) Customer {
+func (r *RepositoryCustomer) GetByID(id int) *Customer {
 	var customer Customer
 	result := r.db.Find(&customer, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		fmt.Printf("Customer not found with id : %d", id)
-		return Customer{}
+		return &Customer{}
 	}
-	return customer
+	return &customer
 }
 
-func (r *RepositoryCustomer) GetByName(name string) []Customer {
-	var customers []Customer
-	r.db.Where("Name LIKE ?", "%"+name+"%").Find(&customers)
-	return customers
+func (r *RepositoryCustomer) GetByUserName(name string) *Customer {
+	var customer Customer
+	result := r.db.Where("Username = ?", name).Find(&customer)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		fmt.Printf("Admin not found with name : %s", name)
+		return &Customer{}
+	}
+	return &customer
 }
 
-func (r *RepositoryCustomer) GetByCustomerName(name string) []Customer {
-	var customers []Customer
-	r.db.Where("CustomerName LIKE ?", "%"+name+"%").Find(&customers)
-	return customers
-}
-
-func (r *RepositoryCustomer) GetByMail(mail string) []Customer {
-	var customers []Customer
-	r.db.Where("Email = ?", mail).Find(&customers)
-	return customers
-}
-
-func (r *RepositoryCustomer) GetByMailAndPassword(mail string, pass string) []Customer {
-	var customers []Customer
-	r.db.Raw("SELECT * FROM Customer WHERE Email = ? AND Password =?", mail, pass).Scan(&customers)
-	return customers
+func (r *RepositoryCustomer) GetByMail(mail string) *Customer {
+	var customer Customer
+	result := r.db.Where("Email = ?", mail).First(&customer)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		fmt.Printf("Admin not found with mail : %s", mail)
+		return &Customer{}
+	}
+	return &customer
 }
 
 func (r *RepositoryCustomer) Delete(c Customer) error {

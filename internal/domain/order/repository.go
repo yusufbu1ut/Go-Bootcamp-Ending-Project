@@ -16,12 +16,22 @@ func NewRepositoryOrder(db *gorm.DB) *RepositoryOrder {
 	}
 }
 
+func (r *RepositoryOrder) Migration() {
+	r.db.AutoMigrate(&Order{})
+}
+
+func (r *RepositoryOrder) InsertSampleData(orders []Order) {
+	for _, o := range orders {
+		r.Create(&o)
+	}
+}
+
 func (r *RepositoryOrder) GetAll(pageIndex, pageSize int) ([]Order, int) {
 	var orders []Order
 	var count int64
 
-	r.db.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&orders).Count(&count)
-
+	r.db.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&orders)
+	r.db.Model(&Order{}).Count(&count)
 	return orders, int(count)
 }
 
