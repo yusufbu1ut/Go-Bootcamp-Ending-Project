@@ -1,0 +1,10 @@
+Env: "dev"
+
+DatabaseSettings:
+  DatabaseURI: "root:passworD9876!@tcp(localhost:3306)/endproject?parseTime=true&loc=Local"
+  DatabaseName: "endproject"
+  Username: "root"
+  Password: "passworD9876!"
+
+JwtSettings:
+  SecretKey: "MY_SECRET_KEY"
