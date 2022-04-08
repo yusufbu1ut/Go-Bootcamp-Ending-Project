@@ -2,32 +2,34 @@ package admin
 
 import (
 	"fmt"
+	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/hashing"
 	"gorm.io/gorm"
 )
 
 type Admin struct {
 	gorm.Model
-	Name      string `json:"name"`
-	AdminName string `json:"admin-name"`
-	Email     string `json:"email"`
-	Password  string `json:"password"`
-	LogStatus bool   `json:"status"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }
 
-func NewAdmin(name string, admin string, email string, pass string) *Admin {
+func NewAdmin(admin string, email string, pass string) *Admin {
+	password, err := hashing.HashWord(pass)
+	if err != nil {
+		fmt.Println("Error occurred: ", err.Error())
+	}
 	return &Admin{
-		Name:      name,
-		AdminName: admin,
-		Email:     email,
-		Password:  pass,
+		Username: admin,
+		Email:    email,
+		Password: password, //Hashing will be here
 	}
 }
 
 func (a *Admin) ToString() string {
-	return fmt.Sprintf("Id: %d, Name: %s, Admin:%s, Mail: %s", a.ID, a.Name, a.AdminName, a.Email)
+	return fmt.Sprintf("Id: %d, Admin:%s, Mail: %s", a.ID, a.Username, a.Email)
 }
 
 func (a *Admin) BeforeDelete(tx *gorm.DB) (err error) {
-	fmt.Printf("Admin %s deleting...", a.AdminName)
+	fmt.Printf("Admin %s deleting...", a.Username)
 	return nil
 }

@@ -2,28 +2,32 @@ package customer
 
 import (
 	"fmt"
+	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/hashing"
 	"gorm.io/gorm"
 )
 
 type Customer struct {
 	gorm.Model
-	Name         string `json:"name"`
-	CustomerName string `json:"customer-name"`
-	Email        string `json:"email"`
-	Password     string `json:"password"`
-	PhoneNo      string `json:"phone"`
-	Address      string `json:"address"`
-	LogStatus    bool   `json:"status"`
+	Name     string `json:"name"`
+	Username string `json:"username"`
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	PhoneNo  string `json:"phone"`
+	Address  string `json:"address"`
 }
 
-func NewCustomer(name string, customerName string, email string, pass string, phone string, address string) *Customer {
+func NewCustomer(name string, Username string, email string, pass string, phone string, address string) *Customer {
+	password, err := hashing.HashWord(pass)
+	if err != nil {
+		fmt.Println("Error occurred: ", err.Error())
+	}
 	return &Customer{
-		Name:         name,
-		CustomerName: customerName,
-		Email:        email,
-		Password:     pass,
-		PhoneNo:      phone,
-		Address:      address,
+		Name:     name,
+		Username: Username,
+		Email:    email,
+		Password: password,
+		PhoneNo:  phone,
+		Address:  address,
 	}
 }
 
