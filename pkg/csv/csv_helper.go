@@ -84,14 +84,13 @@ func convertToCategoryItem(linesChan <-chan []string, resultsChan chan<- categor
 		if len(c) >= 2 {
 			description = c[places[2]]
 		}
-
 		categoryItem := category.NewCategory(c[places[0]], uint(code), description)
 		resultsChan <- *categoryItem
 	}
 }
 
 //findCategoryItemsPlaces this function finds the places for category' columns if there is more columns in csv file
-//csv file should contain column named as name,code,description
+//csv file should contain columns named as name,code,description
 func findCategoryItemsPlaces(line []string) []int {
 	places := make([]int, 3)
 	for i, c := range line {

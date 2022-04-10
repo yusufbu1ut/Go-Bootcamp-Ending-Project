@@ -10,7 +10,9 @@ import (
 	"time"
 )
 
-func ShutdownGin(instance *http.Server, timeout time.Duration) {
+//ShutdownGin runs when ending of the server it waits given timeout duration after this waiting server will be shutdown
+//On this waiting it response the requests which as came the routines before shutdown
+func ShutdownGin(server *http.Server, timeout time.Duration) {
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
@@ -19,10 +21,10 @@ func ShutdownGin(instance *http.Server, timeout time.Duration) {
 
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
-	if err := instance.Shutdown(ctx); err != nil {
+	if err := server.Shutdown(ctx); err != nil {
 		log.Fatal("Server Shutdown:", err)
 	}
-	// catching ctx.Done(). timeout of 5 seconds.
+	// catching ctx.Done(). timeout seconds.
 	select {
 	case <-ctx.Done():
 		log.Printf("timeout of %s seconds.", timeout.String())

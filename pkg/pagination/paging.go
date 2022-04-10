@@ -27,7 +27,7 @@ type Pages struct {
 	Items      interface{} `json:"items"`
 }
 
-// New creates a new Pages instance.
+// New creates a new Pages.
 // The page parameter is 1-based and refers to the current page index/number.
 // The pageSize parameter refers to the number of items on each page.
 // And the total parameter specifies the total number of data items.
