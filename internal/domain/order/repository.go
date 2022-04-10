@@ -26,18 +26,15 @@ func (r *RepositoryOrder) InsertSampleData(orders []Order) {
 	}
 }
 
-func (r *RepositoryOrder) GetAll(pageIndex, pageSize int) ([]Order, int) {
+func (r *RepositoryOrder) GetAll() []Order {
 	var orders []Order
-	var count int64
-
-	r.db.Offset((pageIndex - 1) * pageSize).Limit(pageSize).Find(&orders)
-	r.db.Model(&Order{}).Count(&count)
-	return orders, int(count)
+	r.db.Where("IsOrder =?", true).Find(&orders)
+	return orders
 }
 
 func (r *RepositoryOrder) GetByID(id int) Order {
 	var order Order
-	result := r.db.Find(&order, id)
+	result := r.db.Where("IsOrder =?", true).Find(&order, id)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		fmt.Printf("Order not found with id : %d", id)
 		return Order{}
@@ -47,7 +44,7 @@ func (r *RepositoryOrder) GetByID(id int) Order {
 
 func (r *RepositoryOrder) GetByCustomerID(id int) []Order {
 	var orders []Order
-	result := r.db.Where("CustomerID = ?", id).Find(&orders)
+	result := r.db.Where("CustomerID = ?", id).Where("IsOrder =?", true).Find(&orders)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		fmt.Printf("Order not found with customer id : %d", id)
 		return nil
@@ -57,16 +54,25 @@ func (r *RepositoryOrder) GetByCustomerID(id int) []Order {
 
 func (r *RepositoryOrder) GetByProductID(id int) []Order {
 	var orders []Order
-	result := r.db.Where("ProductID = ?", id).Find(&orders)
+	result := r.db.Where("ProductID = ?", id).Where("IsOrder =?", true).Find(&orders)
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		fmt.Printf("Order not found with product id : %d", id)
 		return nil
 	}
 	return orders
 }
+func (r *RepositoryOrder) GetByOrderCode(id int, code string) []Order {
+	var orders []Order
+	result := r.db.Where("CustomerID = ?", id).Where("OrderCode = ?", code).Where("IsOrder =?", true).Find(&orders)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		fmt.Printf("Orders not found with product id : %s", code)
+		return nil
+	}
+	return orders
+}
 
 func (r *RepositoryOrder) Delete(o Order) error {
-	result := r.db.Delete(o)
+	result := r.db.Delete(&o)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -90,7 +96,7 @@ func (r *RepositoryOrder) Create(o *Order) error {
 }
 
 func (r *RepositoryOrder) Update(o Order) error {
-	result := r.db.Save(o)
+	result := r.db.Save(&o)
 	if result.Error != nil {
 		return result.Error
 	}

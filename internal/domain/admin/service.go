@@ -14,6 +14,7 @@ func NewServiceAdmin(r *RepositoryAdmin) *ServiceAdmin {
 	}
 }
 
+//GetUser gets user with checking email and password
 func (s *ServiceAdmin) GetUser(email string, password string) *Admin {
 	admin := s.r.GetByMail(email)
 	passCheck := hashing.CheckWordHash(password, admin.Password)

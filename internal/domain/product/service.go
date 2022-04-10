@@ -96,3 +96,8 @@ func (s *ServiceProduct) Search(product *Product) ([]Product, error) {
 
 	return products, nil
 }
+
+func (s *ServiceProduct) GetById(id int) Product {
+	product := s.r.GetByID(id)
+	return product
+}

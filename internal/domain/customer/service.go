@@ -47,3 +47,8 @@ func (s *ServiceCustomer) GetUser(email string, password string) *Customer {
 	}
 	return &Customer{}
 }
+
+func (s *ServiceCustomer) GetUserWithId(id int) *Customer {
+	customer := s.r.GetByID(id)
+	return customer
+}
