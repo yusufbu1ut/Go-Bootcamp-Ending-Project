@@ -1,0 +1,792 @@
+basePath: /
+definitions:
+  basket.ResponseBasket:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/basket.ResponseProduct'
+        type: array
+      username:
+        type: string
+    type: object
+  basket.ResponseProduct:
+    properties:
+      amount:
+        type: integer
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
+  login.RequestLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  order.ResponseOrder:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      products:
+        items:
+          $ref: '#/definitions/order.ResponseProduct'
+        type: array
+      username:
+        type: string
+    type: object
+  order.ResponseProduct:
+    properties:
+      amount:
+        type: integer
+      code:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      order-time:
+        type: string
+    type: object
+  pagination.Pages:
+    properties:
+      items: {}
+      page:
+        type: integer
+      pageCount:
+        type: integer
+      size:
+        type: integer
+      totalCount:
+        type: integer
+    type: object
+  product.ResponseProduct:
+    properties:
+      amount:
+        type: integer
+      category-id:
+        type: integer
+      code:
+        type: integer
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: number
+    type: object
+  sign_up.RequestCustomer:
+    properties:
+      address:
+        type: string
+      email:
+        type: string
+      name:
+        type: string
+      password:
+        type: string
+      phone:
+        type: string
+      username:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: yusufblt10@outlook.com
+    name: Yusuf BULUT
+    url: https://www.linkedin.com/in/yusufbu1ut/
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Golang Bootcamp Ending Project- Basket API
+  version: "1.0"
+paths:
+  /basket:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Takes the basket product infos and deletes it, product id is
+          needed
+        in: query
+        name: id
+        type: integer
+      - description: Takes the basket product infos and deletes it, product id is
+          needed
+        in: body
+        name: product-request
+        schema:
+          $ref: '#/definitions/basket.ResponseProduct'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes given basket products id, it can be with query or request body
+      tags:
+      - Basket
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/basket.ResponseBasket'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Gets all basket items for the authed customer
+      tags:
+      - Basket
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Takes the basket infos and updates it, basket id and to update
+          amount is needed
+        in: body
+        name: basket-request
+        required: true
+        schema:
+          $ref: '#/definitions/basket.ResponseProduct'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Updates given basket item, only amount can be updated
+      tags:
+      - Basket
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Takes the products and adds them
+        in: body
+        name: basket-request
+        required: true
+        schema:
+          $ref: '#/definitions/basket.ResponseProduct'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Adds the given items to basket
+      tags:
+      - Basket
+  /basket/complete:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Completes baskets to orders with basket products
+      tags:
+      - Basket
+  /category:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Page Index
+        in: query
+        name: page
+        type: integer
+      - description: Page Size
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pagination.Pages'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Gets all categories with pagination parameters page and size
+      tags:
+      - Category
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create categories with given csv file uploads it after that reads and
+        creates (adding form-data not implemented for swagger)
+      tags:
+      - Category
+  /login/admin:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login process takes admin' email and password. Checks the inputs
+          in database and returns JWT token.
+        in: body
+        name: login-request
+        required: true
+        schema:
+          $ref: '#/definitions/login.RequestLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Admins login with email and password
+      tags:
+      - Login
+  /login/customer:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Login process takes customer' email and password. Checks the
+          inputs in database and returns JWT token.
+        in: body
+        name: login-request
+        required: true
+        schema:
+          $ref: '#/definitions/login.RequestLogin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Customers login with email and password
+      tags:
+      - Login
+  /order:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/order.ResponseOrder'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Gets all order items for the authed customer
+      tags:
+      - Order
+  /order/cancel:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Takes the order codes and cancel them
+        in: query
+        name: code
+        type: string
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Cancels the orders with given order code
+      tags:
+      - Order
+  /product:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: Takes the product id and deletes it, product id is needed
+        in: query
+        name: id
+        type: integer
+      - description: Takes the product infos and deletes it, product id is needed
+        in: body
+        name: product-request
+        schema:
+          $ref: '#/definitions/product.ResponseProduct'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Deletes given product id, it can be with query or request body
+      tags:
+      - Product
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Page Index
+        in: query
+        name: page
+        type: integer
+      - description: Page Size
+        in: query
+        name: size
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/pagination.Pages'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Gets all products with pagination parameters page and size
+      tags:
+      - Product
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Takes the products and adds them to db
+        in: body
+        name: product-request
+        required: true
+        schema:
+          $ref: '#/definitions/product.ResponseProduct'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Creates products with the given request
+      tags:
+      - Product
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: Takes the product infos and updates it. Product id, name, category
+          id and code needed
+        in: body
+        name: product-request
+        required: true
+        schema:
+          $ref: '#/definitions/product.ResponseProduct'
+      - description: Authorization
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Updates given product
+      tags:
+      - Product
+  /product/search:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Name
+        in: query
+        name: name
+        type: string
+      - description: CategoryId
+        in: query
+        name: categoryId
+        type: integer
+      - description: Amount
+        in: query
+        name: amount
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/product.ResponseProduct'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Gets all products with search parameters name, amount or categoryId
+      tags:
+      - Product
+  /signup:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: Sing-up takes  username, email and password necessarily. Other
+          fields not necessary but customers can add them too. Checks the customer
+          in database adds it and returns JWT token.
+        in: body
+        name: customer
+        required: true
+        schema:
+          $ref: '#/definitions/sign_up.RequestCustomer'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Customers can sign up with username,email and password(Needed fields)
+      tags:
+      - SignUp
+schemes:
+- http
+swagger: "2.0"
