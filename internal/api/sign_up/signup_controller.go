@@ -1,13 +1,13 @@
 package sign_up
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/config"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/customer"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/hashing"
 	jwtHelper "github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/jwt"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -18,6 +18,8 @@ type ControllerSignup struct {
 	customerService *customer.ServiceCustomer
 }
 
+// @BasePath /signup
+
 func NewSignupController(appConfig *config.Configuration, service *customer.ServiceCustomer) *ControllerSignup {
 	return &ControllerSignup{
 		appConfig:       appConfig,
@@ -25,8 +27,19 @@ func NewSignupController(appConfig *config.Configuration, service *customer.Serv
 	}
 }
 
+// Signup godoc
+// @Summary Customers can sign up with username,email and password(Needed fields)
+// @Tags SignUp
+// @Accept  json
+// @Produce  json
+// @Param customer body RequestCustomer true "Sing-up takes  username, email and password necessarily. Other fields not necessary but customers can add them too. Checks the customer in database adds it and returns JWT token."
+// @Success 201 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /signup [post]
+//Signup works with request body it should contain username,email and password
 func (c *ControllerSignup) Signup(g *gin.Context) {
-	var req customer.Customer
+	var req RequestCustomer
 	err := g.ShouldBind(&req)
 	if err != nil {
 		g.JSON(http.StatusBadRequest, gin.H{
@@ -47,7 +60,12 @@ func (c *ControllerSignup) Signup(g *gin.Context) {
 	user := c.customerService.GetUser(req.Email, req.Password)
 	hashedRole, err := hashing.HashWord("customer") //role is hiding with hashing because if someone can reach and change
 	if err != nil {
-		fmt.Println("Error occurred:", err.Error())
+		log.Println("Error occurred:", err.Error())
+		g.JSON(http.StatusInternalServerError, gin.H{
+			"error_message": err.Error(),
+		})
+		g.Abort()
+		return
 	}
 	jwtClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId":   user.ID,

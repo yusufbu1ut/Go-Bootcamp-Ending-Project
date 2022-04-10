@@ -15,12 +15,25 @@ type ControllerCategory struct {
 	categoryService *category.ServiceCategory
 }
 
+// @BasePath /category
+
 func NewCategoryController(service *category.ServiceCategory) *ControllerCategory {
 	return &ControllerCategory{
 		categoryService: service,
 	}
 }
 
+// GetAll godoc
+// @Summary Gets all categories with pagination parameters page and size
+// @Tags Category
+// @Accept  json
+// @Produce  json
+// @Param page query int false "Page Index"
+// @Param size query int false "Page Size"
+// @Success 200 {object} pagination.Pages
+// @Failure 404 {object} map[string]string
+// @Router /category [get]
+//GetAll func needs page and size values from query if there is not, shows with default
 func (c *ControllerCategory) GetAll(g *gin.Context) {
 	pageIndex, pageSize := pagination.GetPaginationParametersFromRequest(g)
 	categories, count := c.categoryService.GetAll(pageIndex, pageSize)
@@ -36,6 +49,18 @@ func (c *ControllerCategory) GetAll(g *gin.Context) {
 	g.JSON(http.StatusOK, paginatedResult)
 }
 
+// CreateWithCollectedData godoc
+// @Summary Create categories with given csv file uploads it after that reads and creates (adding form-data not implemented for swagger)
+// @Tags Category
+// @Accept  multipart/form-data
+// @Produce  json
+// @Success 201 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Security ApiKeyAuth
+// @param Authorization header string true "Authorization"
+// @Router /category [post]
+//CreateWithCollectedData needs form-data from body key should be named as "file"
 func (c *ControllerCategory) CreateWithCollectedData(g *gin.Context) {
 	file, err := g.FormFile("file")
 
@@ -51,14 +76,14 @@ func (c *ControllerCategory) CreateWithCollectedData(g *gin.Context) {
 	// Generate random file name for the new uploaded file so it doesn't override the old file with same name
 	newFileName := uuid.New().String() + extension
 
-	// The file is received, so let's save it
-	if err := g.SaveUploadedFile(file, "docs/"+newFileName); err != nil {
+	// The file is received, saving
+	if err := g.SaveUploadedFile(file, "assets/"+newFileName); err != nil {
 		g.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{
 			"message": "Unable to save the file",
 		})
 		return
 	}
-	res := csv.ReadCsvWithWorkerPool("docs/" + newFileName)
+	res := csv.ReadCsvWithWorkerPool("assets/" + newFileName)
 	if res == nil {
 		os.Remove("docs/" + newFileName)
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -69,7 +94,7 @@ func (c *ControllerCategory) CreateWithCollectedData(g *gin.Context) {
 
 	c.categoryService.CreateWithCollectedData(res)
 
-	// File saved successfully. Return proper result
+	// File saved successfully
 	g.JSON(http.StatusCreated, gin.H{
 		"message": "Your file has been successfully uploaded.",
 	})

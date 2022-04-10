@@ -1,7 +1,6 @@
 package admin
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/api/login"
@@ -9,6 +8,7 @@ import (
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/admin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/hashing"
 	jwtHelper "github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/jwt"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -19,6 +19,8 @@ type ControllerAdmin struct {
 	adminService *admin.ServiceAdmin
 }
 
+// @BasePath /login
+
 func NewAdminController(appConfig *config.Configuration, service *admin.ServiceAdmin) *ControllerAdmin {
 	return &ControllerAdmin{
 		appConfig:    appConfig,
@@ -26,6 +28,17 @@ func NewAdminController(appConfig *config.Configuration, service *admin.ServiceA
 	}
 }
 
+// Login godoc
+// @Summary Admins login with email and password
+// @Tags Login
+// @Accept  json
+// @Produce  json
+// @Param login-request body login.RequestLogin true "Login process takes admin' email and password. Checks the inputs in database and returns JWT token."
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /login/admin [post]
 func (c *ControllerAdmin) Login(g *gin.Context) {
 	var req login.RequestLogin
 	err := g.ShouldBind(&req)
@@ -44,9 +57,15 @@ func (c *ControllerAdmin) Login(g *gin.Context) {
 		g.Abort()
 		return
 	}
+	//here hashing the role and using in middleware
 	hashedRole, err := hashing.HashWord("admin")
 	if err != nil {
-		fmt.Println("Error occurred:", err.Error())
+		log.Println("Error occurred:", err.Error())
+		g.JSON(http.StatusInternalServerError, gin.H{
+			"error_message": err.Error(),
+		})
+		g.Abort()
+		return
 	}
 	jwtClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId":   user.ID,

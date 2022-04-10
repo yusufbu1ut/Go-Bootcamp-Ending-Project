@@ -1,7 +1,6 @@
 package customer
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/api/login"
@@ -9,6 +8,7 @@ import (
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/customer"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/hashing"
 	jwtHelper "github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/jwt"
+	"log"
 	"net/http"
 	"os"
 	"time"
@@ -19,6 +19,8 @@ type ControllerCustomer struct {
 	customerService *customer.ServiceCustomer
 }
 
+// @BasePath /login
+
 func NewCustomerController(appConfig *config.Configuration, service *customer.ServiceCustomer) *ControllerCustomer {
 	return &ControllerCustomer{
 		appConfig:       appConfig,
@@ -26,6 +28,17 @@ func NewCustomerController(appConfig *config.Configuration, service *customer.Se
 	}
 }
 
+// Login godoc
+// @Summary Customers login with email and password
+// @Tags Login
+// @Accept  json
+// @Produce  json
+// @Param login-request body login.RequestLogin true "Login process takes customer' email and password. Checks the inputs in database and returns JWT token."
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /login/customer [post]
 func (c *ControllerCustomer) Login(g *gin.Context) {
 	var req login.RequestLogin
 	err := g.ShouldBind(&req)
@@ -44,9 +57,15 @@ func (c *ControllerCustomer) Login(g *gin.Context) {
 		g.Abort()
 		return
 	}
+	//here hashing the role and using it in middleware
 	hashedRole, err := hashing.HashWord("customer") //role is hiding with hashing because if someone can reach and change
 	if err != nil {
-		fmt.Println("Error occurred:", err.Error())
+		log.Println("Error occurred:", err.Error())
+		g.JSON(http.StatusInternalServerError, gin.H{
+			"error_message": err.Error(),
+		})
+		g.Abort()
+		return
 	}
 	jwtClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId":   user.ID,
