@@ -32,7 +32,17 @@ func ReadCsvWithWorkerPool(path string) chan category.Category {
 	}
 	//read first line checks is there what program need
 	places = findCategoryItemsPlaces(lines[0])
+	//checking fields if there is no field code,name or description
+	cnt := 0
+	for _, place := range places {
+		if cnt == 2 {
+			return nil
+		}
+		if place == 0 {
+			cnt++
+		}
 
+	}
 	wg := new(sync.WaitGroup)
 	for w := 1; w <= 3; w++ {
 		wg.Add(1)

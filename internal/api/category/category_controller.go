@@ -63,7 +63,6 @@ func (c *ControllerCategory) GetAll(g *gin.Context) {
 //CreateWithCollectedData needs form-data from body key should be named as "file"
 func (c *ControllerCategory) CreateWithCollectedData(g *gin.Context) {
 	file, err := g.FormFile("file")
-
 	// The file cannot be received.
 	if err != nil {
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
@@ -73,7 +72,7 @@ func (c *ControllerCategory) CreateWithCollectedData(g *gin.Context) {
 	}
 	// Retrieve file information
 	extension := filepath.Ext(file.Filename)
-	// Generate random file name for the new uploaded file so it doesn't override the old file with same name
+	// Generate random file name for the new uploaded file, so it doesn't override the old file with same name
 	newFileName := uuid.New().String() + extension
 
 	// The file is received, saving
@@ -84,8 +83,9 @@ func (c *ControllerCategory) CreateWithCollectedData(g *gin.Context) {
 		return
 	}
 	res := csv.ReadCsvWithWorkerPool("assets/" + newFileName)
+	// if file is not readable deletes the file that uploaded
 	if res == nil {
-		os.Remove("docs/" + newFileName)
+		os.Remove("assets/" + newFileName)
 		g.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
 			"message": "Uploaded file is not readable",
 		})
