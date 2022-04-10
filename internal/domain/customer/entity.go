@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/hashing"
 	"gorm.io/gorm"
+	"log"
 )
 
 type Customer struct {
@@ -36,6 +37,6 @@ func (c *Customer) ToString() string {
 }
 
 func (c *Customer) BeforeDelete(tx *gorm.DB) (err error) {
-	fmt.Printf("Customer %s deleting...", c.Email)
+	log.Printf("Customer %s deleting...", c.Email)
 	return nil
 }

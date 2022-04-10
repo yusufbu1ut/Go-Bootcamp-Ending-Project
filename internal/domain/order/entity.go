@@ -5,22 +5,26 @@ import (
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/customer"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/product"
 	"gorm.io/gorm"
+	"log"
 )
 
 type Order struct {
 	gorm.Model
-	CustomerID uint              `json:"customer-id"`
-	ProductID  uint              `json:"product-id"`
-	Amount     uint              `json:"amount"`
+	CustomerID uint `json:"customer-id"`
+	ProductID  uint `json:"product-id"`
+	Amount     uint `json:"amount"`
+	IsOrder    bool
+	OrderCode  string
 	Customer   customer.Customer `gorm:"foreignKey:CustomerID"`
 	Product    product.Product   `gorm:"foreignKey:ProductID"`
 }
 
-func NewBasket(customer uint, product uint, amount uint) *Order {
+func NewOrder(customer uint, product uint, amount uint) *Order {
 	return &Order{
 		CustomerID: customer,
 		ProductID:  product,
 		Amount:     amount,
+		IsOrder:    false,
 	}
 }
 
@@ -29,6 +33,6 @@ func (o *Order) ToString() string {
 }
 
 func (o *Order) BeforeDelete(tx *gorm.DB) (err error) {
-	fmt.Printf("Order %d deleting...", o.ID)
+	log.Printf("Order %d deleting...", o.ID)
 	return nil
 }

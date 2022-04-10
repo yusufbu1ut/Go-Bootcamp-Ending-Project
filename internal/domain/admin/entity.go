@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/hashing"
 	"gorm.io/gorm"
+	"log"
 )
 
 type Admin struct {
@@ -16,12 +17,12 @@ type Admin struct {
 func NewAdmin(admin string, email string, pass string) *Admin {
 	password, err := hashing.HashWord(pass)
 	if err != nil {
-		fmt.Println("Error occurred: ", err.Error())
+		log.Println("Error occurred: ", err.Error())
 	}
 	return &Admin{
 		Username: admin,
 		Email:    email,
-		Password: password, //Hashing will be here
+		Password: password,
 	}
 }
 
@@ -30,6 +31,6 @@ func (a *Admin) ToString() string {
 }
 
 func (a *Admin) BeforeDelete(tx *gorm.DB) (err error) {
-	fmt.Printf("Admin %s deleting...", a.Username)
+	log.Printf("Admin %s deleting...", a.Username)
 	return nil
 }

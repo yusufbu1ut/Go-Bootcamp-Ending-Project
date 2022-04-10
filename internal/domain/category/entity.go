@@ -3,6 +3,7 @@ package category
 import (
 	"fmt"
 	"gorm.io/gorm"
+	"log"
 )
 
 type Category struct {
@@ -21,10 +22,10 @@ func NewCategory(name string, code uint, description string) *Category {
 }
 
 func (c *Category) ToString() string {
-	return fmt.Sprintf("Id: %d, Name: %s, Code: %d", c.ID, c.Name, c.Code)
+	return fmt.Sprintf("Name: %s, Code: %d", c.Name, c.Code)
 }
 
 func (c *Category) BeforeDelete(tx *gorm.DB) (err error) {
-	fmt.Printf("Categoty %s deleting...", c.Name)
+	log.Printf("Categoty %s deleting...", c.Name)
 	return nil
 }

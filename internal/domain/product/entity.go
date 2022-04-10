@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/category"
 	"gorm.io/gorm"
+	"log"
 )
 
 type Product struct {
@@ -33,6 +34,6 @@ func (p *Product) ToString() string {
 }
 
 func (p *Product) BeforeDelete(tx *gorm.DB) (err error) {
-	fmt.Printf("Product %d deleting...", p.Code)
+	log.Printf("Product %d %s %d deleting...", p.Code, p.Name, p.CategoryID)
 	return nil
 }
