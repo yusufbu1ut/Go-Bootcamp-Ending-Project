@@ -1,14 +1,15 @@
 package order
 
 import (
+	"net/http"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/config"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/customer"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/order"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/product"
 	jwtHelper "github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/jwt"
-	"net/http"
-	"os"
 )
 
 type ControllerOrder struct {
@@ -35,7 +36,6 @@ func NewOrderController(appConfig *config.Configuration, service *order.ServiceO
 // @Accept  json
 // @Produce  json
 // @Success 201 {object} ResponseOrder
-// @Failure 404 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /order [get]
@@ -77,11 +77,8 @@ func (c *ControllerOrder) GetAll(g *gin.Context) {
 // @Tags Order
 // @Accept  json
 // @Produce  json
-// @Param code query string false "Takes the order codes and cancel them"
+// @Param code query string true "Takes the order codes and cancel them"
 // @Success 200 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /order/cancel [delete]

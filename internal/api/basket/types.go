@@ -16,3 +16,5 @@ type ResponseProduct struct {
 	Name   string `json:"name"`
 	Amount uint   `json:"amount"`
 }
+
+type RequestProduct []ResponseProduct

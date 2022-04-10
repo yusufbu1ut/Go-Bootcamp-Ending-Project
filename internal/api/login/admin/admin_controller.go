@@ -1,6 +1,11 @@
 package admin
 
 import (
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/api/login"
@@ -8,10 +13,6 @@ import (
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/admin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/hashing"
 	jwtHelper "github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/jwt"
-	"log"
-	"net/http"
-	"os"
-	"time"
 )
 
 type ControllerAdmin struct {
@@ -35,9 +36,6 @@ func NewAdminController(appConfig *config.Configuration, service *admin.ServiceA
 // @Produce  json
 // @Param login-request body login.RequestLogin true "Login process takes admin' email and password. Checks the inputs in database and returns JWT token."
 // @Success 200 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
 // @Router /login/admin [post]
 func (c *ControllerAdmin) Login(g *gin.Context) {
 	var req login.RequestLogin

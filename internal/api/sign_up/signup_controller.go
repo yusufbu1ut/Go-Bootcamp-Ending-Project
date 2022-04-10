@@ -1,16 +1,17 @@
 package sign_up
 
 import (
+	"log"
+	"net/http"
+	"os"
+	"time"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/config"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/customer"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/hashing"
 	jwtHelper "github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/jwt"
-	"log"
-	"net/http"
-	"os"
-	"time"
 )
 
 type ControllerSignup struct {
@@ -34,8 +35,6 @@ func NewSignupController(appConfig *config.Configuration, service *customer.Serv
 // @Produce  json
 // @Param customer body RequestCustomer true "Sing-up takes  username, email and password necessarily. Other fields not necessary but customers can add them too. Checks the customer in database adds it and returns JWT token."
 // @Success 201 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 500 {object} map[string]string
 // @Router /signup [post]
 //Signup works with request body it should contain username,email and password
 func (c *ControllerSignup) Signup(g *gin.Context) {

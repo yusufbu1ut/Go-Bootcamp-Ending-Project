@@ -157,24 +157,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       security:
       - ApiKeyAuth: []
       summary: Deletes given basket products id, it can be with query or request body
@@ -196,12 +178,6 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/basket.ResponseBasket'
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       security:
       - ApiKeyAuth: []
       summary: Gets all basket items for the authed customer
@@ -232,24 +208,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       security:
       - ApiKeyAuth: []
       summary: Updates given basket item, only amount can be updated
@@ -264,7 +222,9 @@ paths:
         name: basket-request
         required: true
         schema:
-          $ref: '#/definitions/basket.ResponseProduct'
+          items:
+            $ref: '#/definitions/basket.ResponseProduct'
+          type: array
       - description: Authorization
         in: header
         name: Authorization
@@ -275,24 +235,6 @@ paths:
       responses:
         "201":
           description: Created
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
           schema:
             additionalProperties:
               type: string
@@ -317,18 +259,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
           schema:
             additionalProperties:
               type: string
@@ -358,12 +288,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/pagination.Pages'
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       summary: Gets all categories with pagination parameters page and size
       tags:
       - Category
@@ -381,18 +305,6 @@ paths:
       responses:
         "201":
           description: Created
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
           schema:
             additionalProperties:
               type: string
@@ -424,24 +336,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       summary: Admins login with email and password
       tags:
       - Login
@@ -466,24 +360,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       summary: Customers login with email and password
       tags:
       - Login
@@ -504,12 +380,6 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/order.ResponseOrder'
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       security:
       - ApiKeyAuth: []
       summary: Gets all order items for the authed customer
@@ -523,6 +393,7 @@ paths:
       - description: Takes the order codes and cancel them
         in: query
         name: code
+        required: true
         type: string
       - description: Authorization
         in: header
@@ -534,24 +405,6 @@ paths:
       responses:
         "200":
           description: OK
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
           schema:
             additionalProperties:
               type: string
@@ -589,18 +442,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       security:
       - ApiKeyAuth: []
       summary: Deletes given product id, it can be with query or request body
@@ -625,12 +466,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/pagination.Pages'
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       summary: Gets all products with pagination parameters page and size
       tags:
       - Product
@@ -654,18 +489,6 @@ paths:
       responses:
         "201":
           description: Created
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
           schema:
             additionalProperties:
               type: string
@@ -700,12 +523,6 @@ paths:
             additionalProperties:
               type: string
             type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       security:
       - ApiKeyAuth: []
       summary: Updates given product
@@ -735,18 +552,6 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/product.ResponseProduct'
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "404":
-          description: Not Found
-          schema:
-            additionalProperties:
-              type: string
-            type: object
       summary: Gets all products with search parameters name, amount or categoryId
       tags:
       - Product
@@ -768,18 +573,6 @@ paths:
       responses:
         "201":
           description: Created
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "400":
-          description: Bad Request
-          schema:
-            additionalProperties:
-              type: string
-            type: object
-        "500":
-          description: Internal Server Error
           schema:
             additionalProperties:
               type: string

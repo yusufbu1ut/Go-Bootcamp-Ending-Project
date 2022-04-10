@@ -1,12 +1,13 @@
 package product
 
 import (
+	"net/http"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/category"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/product"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/pagination"
-	"net/http"
-	"strconv"
 )
 
 type ControllerProduct struct {
@@ -31,7 +32,6 @@ func NewProductController(service *product.ServiceProduct, service2 *category.Se
 // @Param page query int false "Page Index"
 // @Param size query int false "Page Size"
 // @Success 200 {object} pagination.Pages
-// @Failure 404 {object} map[string]string
 // @Router /product [get]
 func (c *ControllerProduct) GetAll(g *gin.Context) {
 	pageIndex, pageSize := pagination.GetPaginationParametersFromRequest(g)
@@ -58,8 +58,6 @@ func (c *ControllerProduct) GetAll(g *gin.Context) {
 // @Produce  json
 // @Param product-request body ResponseProduct true "Takes the products and adds them to db"
 // @Success 201 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 500 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /product [post]
@@ -111,8 +109,6 @@ func (c *ControllerProduct) Create(g *gin.Context) {
 // @Param categoryId query int false "CategoryId"
 // @Param amount query int false "Amount"
 // @Success 200 {object} ResponseProduct
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
 // @Router /product/search [get]
 //Search works with query parameters name, category id and amount, amount process looks equal or if there is more
 func (c *ControllerProduct) Search(g *gin.Context) {
@@ -210,8 +206,6 @@ func (c *ControllerProduct) Search(g *gin.Context) {
 // @Param id query int false "Takes the product id and deletes it, product id is needed"
 // @Param product-request body ResponseProduct false "Takes the product infos and deletes it, product id is needed"
 // @Success 200 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /product [delete]
@@ -278,7 +272,6 @@ func (c *ControllerProduct) Delete(g *gin.Context) {
 // @Produce  json
 // @Param product-request body ResponseProduct true "Takes the product infos and updates it. Product id, name, category id and code needed"
 // @Success 200 {object} map[string]string
-// @Failure 400 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /product [put]

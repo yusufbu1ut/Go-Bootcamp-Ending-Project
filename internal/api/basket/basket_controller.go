@@ -1,6 +1,10 @@
 package basket
 
 import (
+	"net/http"
+	"os"
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/config"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/basket"
@@ -8,9 +12,6 @@ import (
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/order"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/product"
 	jwtHelper "github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/jwt"
-	"net/http"
-	"os"
-	"strconv"
 )
 
 type ControllerBasket struct {
@@ -37,7 +38,6 @@ func NewBasketController(appConfig *config.Configuration, service *basket.Servic
 // @Accept  json
 // @Produce  json
 // @Success 201 {object} basket.ResponseBasket
-// @Failure 404 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /basket [get]
@@ -75,11 +75,8 @@ func (c *ControllerBasket) GetAll(g *gin.Context) {
 // @Tags Basket
 // @Accept  json
 // @Produce  json
-// @Param basket-request body basket.ResponseProduct true "Takes the products and adds them"
+// @Param basket-request body basket.RequestProduct true "Takes the products and adds them"
 // @Success 201 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /basket [post]
@@ -175,9 +172,6 @@ func (c *ControllerBasket) Create(g *gin.Context) {
 // @Produce  json
 // @Param basket-request body basket.ResponseProduct true "Takes the basket infos and updates it, basket id and to update amount is needed"
 // @Success 200 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /basket [patch]
@@ -269,9 +263,6 @@ func (c *ControllerBasket) Update(g *gin.Context) {
 // @Param id query int false "Takes the basket product infos and deletes it, product id is needed"
 // @Param product-request body basket.ResponseProduct false "Takes the basket product infos and deletes it, product id is needed"
 // @Success 200 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /basket [delete]
@@ -364,8 +355,6 @@ func (c *ControllerBasket) Delete(g *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Success 200 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /basket/complete [post]

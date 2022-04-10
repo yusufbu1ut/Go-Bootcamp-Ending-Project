@@ -1,14 +1,15 @@
 package category
 
 import (
+	"net/http"
+	"os"
+	"path/filepath"
+
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/internal/domain/category"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/csv"
 	"github.com/yusufbu1ut/Go-Bootcamp-Ending-Project/pkg/pagination"
-	"net/http"
-	"os"
-	"path/filepath"
 )
 
 type ControllerCategory struct {
@@ -31,7 +32,6 @@ func NewCategoryController(service *category.ServiceCategory) *ControllerCategor
 // @Param page query int false "Page Index"
 // @Param size query int false "Page Size"
 // @Success 200 {object} pagination.Pages
-// @Failure 404 {object} map[string]string
 // @Router /category [get]
 //GetAll func needs page and size values from query if there is not, shows with default
 func (c *ControllerCategory) GetAll(g *gin.Context) {
@@ -55,8 +55,6 @@ func (c *ControllerCategory) GetAll(g *gin.Context) {
 // @Accept  multipart/form-data
 // @Produce  json
 // @Success 201 {object} map[string]string
-// @Failure 400 {object} map[string]string
-// @Failure 500 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /category [post]
