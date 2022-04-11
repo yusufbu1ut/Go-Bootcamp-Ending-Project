@@ -422,7 +422,7 @@
             }
         },
         "/order/cancel": {
-            "delete": {
+            "patch": {
                 "security": [
                     {
                         "ApiKeyAuth": []

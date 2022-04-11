@@ -81,7 +81,7 @@ func (c *ControllerOrder) GetAll(g *gin.Context) {
 // @Success 200 {object} map[string]string
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
-// @Router /order/cancel [delete]
+// @Router /order/cancel [patch]
 //Cancel cancels the orders with
 func (c *ControllerOrder) Cancel(g *gin.Context) {
 	decodedClaims := jwtHelper.VerifyToken(g.GetHeader("Authorization"), c.appConfig.SecretKey, os.Getenv("ENV"))

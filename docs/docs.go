@@ -427,7 +427,7 @@ const docTemplate = `{
             }
         },
         "/order/cancel": {
-            "delete": {
+            "patch": {
                 "security": [
                     {
                         "ApiKeyAuth": []

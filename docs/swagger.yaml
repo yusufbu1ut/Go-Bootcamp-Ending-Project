@@ -386,7 +386,7 @@ paths:
       tags:
       - Order
   /order/cancel:
-    delete:
+    patch:
       consumes:
       - application/json
       parameters:
