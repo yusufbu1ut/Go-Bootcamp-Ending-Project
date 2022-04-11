@@ -37,7 +37,7 @@ func NewBasketController(appConfig *config.Configuration, service *basket.Servic
 // @Tags Basket
 // @Accept  json
 // @Produce  json
-// @Success 201 {object} basket.ResponseBasket
+// @Success 200 {object} basket.ResponseBasket
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /basket [get]

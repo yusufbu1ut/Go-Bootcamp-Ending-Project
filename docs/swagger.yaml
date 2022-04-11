@@ -27,8 +27,6 @@ definitions:
         type: integer
       id:
         type: integer
-      name:
-        type: string
     type: object
   login.RequestLogin:
     properties:
@@ -174,8 +172,8 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             $ref: '#/definitions/basket.ResponseBasket'
       security:
@@ -376,8 +374,8 @@ paths:
       produces:
       - application/json
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
           schema:
             $ref: '#/definitions/order.ResponseOrder'
       security:

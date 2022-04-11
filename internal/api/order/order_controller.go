@@ -35,7 +35,7 @@ func NewOrderController(appConfig *config.Configuration, service *order.ServiceO
 // @Tags Order
 // @Accept  json
 // @Produce  json
-// @Success 201 {object} ResponseOrder
+// @Success 200 {object} ResponseOrder
 // @Security ApiKeyAuth
 // @param Authorization header string true "Authorization"
 // @Router /order [get]
