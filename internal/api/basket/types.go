@@ -12,9 +12,8 @@ type ResponseBasket struct {
 }
 
 type ResponseProduct struct {
-	ID     uint   `json:"id"`
-	Name   string `json:"name"`
-	Amount uint   `json:"amount"`
+	ID     uint `json:"id"`
+	Amount uint `json:"amount"`
 }
 
 type RequestProduct []ResponseProduct

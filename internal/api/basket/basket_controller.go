@@ -61,9 +61,7 @@ func (c *ControllerBasket) GetAll(g *gin.Context) {
 	response.Address = customerUser.Address
 	for _, b := range basket {
 		var responseProduct ResponseProduct
-		product := c.productService.GetById(int(b.ProductID))
-		responseProduct.ID = product.ID
-		responseProduct.Name = product.Name
+		responseProduct.ID = b.ProductID
 		responseProduct.Amount = b.Amount
 		response.Products = append(response.Products, responseProduct)
 	}

@@ -62,6 +62,9 @@ func (c *ControllerOrder) GetAll(g *gin.Context) {
 	for _, o := range orders {
 		var resProduct ResponseProduct
 		productItem := c.productService.GetById(int(o.ProductID))
+		if productItem.ID == 0 {
+			continue
+		}
 		resProduct.ID = productItem.ID
 		resProduct.OrderTime = o.UpdatedAt
 		resProduct.Name = productItem.Name
