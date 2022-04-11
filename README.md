@@ -16,6 +16,9 @@ PS: Before you start, set the sql connections in the configs/project.qa.yaml fil
 
 ![Entities](assets/project.png)
 
+Only admins can add categories and products admin id can be added as foreignkey adminId to category, product entities.
+
+Basket and Order difference is providing with IsOrder attribute.
 
 ## API Endpoints
 
@@ -90,3 +93,28 @@ Get orders runs with  __Authorization JWT token__ and returns customers orders.<
 
 Cancel order works with __Authorization JWT token__ and *query parameter* "__code__". Code represents order and cancels if it has not been 14 days since ordered.<br>
 ``PATCH localhost:8080/order/cancel``
+
+## Info
+
+In Swagger POST /category with CSV not implemented. Can be run in Postman.
+
+Order and Basket implement works on same entity named order. Difference is providing with isOrder and orderCode. If IsOrder is true it is order but if it is false it represents basket item. The order code is created when the basket is ordered.
+
+When program starts admin users and one category named as Other will be created.
+
+If a product is deleted but if it is in order it will not shown on get all orders, if is in basket it will be deleted customers by self.
+
+Adding category process CSV file shoud contain columns name,code(uint) and description.
+
+When a customer or admin added password will be hashed.
+Same hashing is using at user roles.
+
+
+### -Shortcomings
+There are soft deletes working on the DB so the response can contain more information.
+
+Basket entity can be added to DB
+
+No test execution provided yet.
+
+
